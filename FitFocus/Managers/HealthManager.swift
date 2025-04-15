@@ -69,18 +69,21 @@ class HealthManager {
         }
         healthStore.execute(query)
     }
-    func fetchTodayStandTime(completion: @escaping(Result<Double, Error>) -> Void){
-        let standTime = HKQuantityType(.appleStandHour)
+    
+    func fetchTodayStandHours(completion: @escaping(Result<Double, Error>) -> Void){
+        let standTime = HKCategoryType(.appleStandHour)
         let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
-        let query = HKStatisticsQuery(quantityType: standTime, quantitySamplePredicate: predicate) { _, results,
+        let query = HKSampleQuery(sampleType: standTime, predicate: predicate, limit: HKObjectQueryNoLimit, sortDescriptors: nil) { _, results,
             error in
-            guard let quantity = results?.sumQuantity(), error == nil else {
+            guard let samples = results as? [HKQuantitySample], error == nil else {
                 completion(.failure(NSError()))
                 return
             }
             
-            let standTime = quantity.doubleValue(for: .minute())
-            completion(.success(standTime))
+            print(samples)
+            print(samples.map({$0.quantity}))
+            
+            completion(.success(2.0))
         }
         healthStore.execute(query)
     }
