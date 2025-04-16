@@ -26,7 +26,7 @@ class HealthManager {
         
         Task {
             do{
-                try await requestHealthKitSuccess()
+                try await requestHealthKitAccess()
             }
             catch {
                 print(error.localizedDescription)
@@ -34,14 +34,31 @@ class HealthManager {
         }
     }
     
-    func requestHealthKitSuccess() async throws {
+    func requestHealthKitAccess() async throws {
         let calories = HKQuantityType(.activeEnergyBurned)
         let exercise = HKQuantityType(.appleExerciseTime)
         let stand = HKCategoryType(.appleStandHour)
+        let steps = HKQuantityType(.stepCount)
         
-        let healthTypes : Set = [calories, exercise, stand]
+        let healthTypes : Set = [calories, exercise, stand, steps]
         
         try await healthStore.requestAuthorization(toShare: [], read: healthTypes)
+    }
+    
+    func fetchTodaySteps(){
+        let steps = HKQuantityType(.stepCount)
+        let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
+        let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, results,
+            error in
+            guard let quantity = results?.sumQuantity(), error == nil else {
+                print("Error fetching today step data")
+                return
+            }
+            
+            let stepCount = quantity.doubleValue(for: .count())
+            print(stepCount)
+        }
+        healthStore.execute(query)
     }
     
     func fetchTodayCaloriesBurned(completion: @escaping(Result<Double, Error>) -> Void){
