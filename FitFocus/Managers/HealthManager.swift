@@ -45,12 +45,13 @@ class HealthManager {
         try await healthStore.requestAuthorization(toShare: [], read: healthTypes)
     }
     
-    func fetchTodaySteps(){
+    func fetchTodaySteps(completion: @escaping(Result<Int, Error>) -> Void){
         let steps = HKQuantityType(.stepCount)
         let predicate = HKQuery.predicateForSamples(withStart: .startOfDay, end: Date())
         let query = HKStatisticsQuery(quantityType: steps, quantitySamplePredicate: predicate) { _, results,
             error in
             guard let quantity = results?.sumQuantity(), error == nil else {
+                completion(.failure(NSError()))
                 print("Error fetching today step data")
                 return
             }

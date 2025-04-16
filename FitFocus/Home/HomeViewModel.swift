@@ -14,6 +14,7 @@ class HomeViewModel: ObservableObject {
     @Published var calories: Int  = 0
     @Published var exercise: Int = 0
     @Published var stand: Int = 0
+    @Published var steps: Int = 0
     
     var mockActivities = [
         Activity(id : 0, title : "Today steps", subtitle: "Goal 6,000", image : "figure.walk", tintColor: .green, amount : "32000"),
@@ -32,12 +33,30 @@ class HomeViewModel: ObservableObject {
     init(){
         Task {
             do {
-                try await healthManager.requestHealthKitSuccess()
-                fetchTodayCalories()
-                fetchTodayExerciseTime()
-                fetchTodayStandHours()
-            } catch {
-                print(error.localizedDescription)
+                try await healthManager.requestHealthKitAccess()
+                    fetchTodaySteps()
+                    fetchTodayCalories()
+                    fetchTodayExerciseTime()
+                    fetchTodayStandHours()
+                    print("success")
+                }
+                catch {
+                    print(error.localizedDescription)
+                }
+        }
+    }
+    
+    func fetchTodaySteps(){
+        healthManager.fetchTodaySteps {
+            result in
+            switch result {
+            case .success(let steps):
+                DispatchQueue.main.async {
+                    self.steps = Int(steps)
+                }
+            case .failure :
+                print("error fetching steps")
+//                print(failure.localizedDescription)
             }
         }
     }
@@ -50,8 +69,9 @@ class HomeViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.calories = Int(calories)
                 }
-            case .failure(let failure):
-                print(failure.localizedDescription)
+            case .failure:
+                print("error fetching calories")
+//                print(failure.localizedDescription)
             }
         }
     }
@@ -64,8 +84,9 @@ class HomeViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.exercise = Int(exercise)
                 }
-            case .failure(let failure):
-                print(failure.localizedDescription)
+            case .failure:
+                print("error fetching exercise time")
+//                print(failure.localizedDescription)
             }
         }
     }
@@ -78,8 +99,9 @@ class HomeViewModel: ObservableObject {
                 DispatchQueue.main.async {
                     self.stand = hours
                 }
-            case .failure(let failure):
-                print(failure.localizedDescription)
+            case .failure:
+                print("error fetching stand hours")
+//                print(failure.localizedDescription)
             }
         }
     }
