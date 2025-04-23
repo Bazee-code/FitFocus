@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import ManagedSettings
 
 struct StepCountView: View {
     @EnvironmentObject var healthStore: HealthStore
@@ -162,4 +164,5 @@ struct AppAccessStatusRow: View {
 
 #Preview {
     StepCountView()
+        .environmentObject(HealthStore())
 }
