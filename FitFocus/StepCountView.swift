@@ -39,7 +39,8 @@ struct StepCountView: View {
                             .animation(.easeOut, value: healthStore.steps)
                         
                         VStack {
-                            Text("\(healthStore.steps)")
+//                            Text("\(healthStore.steps)")
+                            Text("1000")
                                 .font(.system(size: 50, weight: .bold, design: .rounded))
                                 .foregroundColor(.primary)
                                 .scaleEffect(animationAmount)
@@ -104,8 +105,12 @@ struct StepCountView: View {
     // Using mock data for demonstration
     var appAccessStatus: [AppStatus] {
         [
-            AppStatus(appName: "Instagram", iconName: "camera.fill", goalSteps: 5000),
-            AppStatus(appName: "TikTok", iconName: "video.fill", goalSteps: 7500),
+            AppStatus(appName: "Instagram", iconName: "camera.fill", goalSteps: 50),
+            AppStatus(appName: "TikTok", iconName: "video.fill", goalSteps: 0),
+            AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000),
+            AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000),
+            AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000),
+            AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000),
             AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000)
         ]
     }
@@ -131,16 +136,17 @@ struct AppAccessStatusRow: View {
             Image(systemName: status.iconName)
                 .font(.title2)
                 .frame(width: 40, height: 40)
-                .background(Color.gray.opacity(0.1))
+                .background(Color.black.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             
             VStack(alignment: .leading) {
                 Text(status.appName)
                     .font(.headline)
+                    .foregroundColor(.black)
                 
                 Text("Goal: \(status.goalSteps) steps")
                     .font(.subheadline)
-                    .foregroundColor(.secondary)
+                    .foregroundColor(.gray)
             }
             
             Spacer()
