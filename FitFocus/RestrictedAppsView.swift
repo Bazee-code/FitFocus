@@ -137,5 +137,6 @@ struct RestrictedAppRow: View {
 
 #Preview {
     RestrictedAppsView()
-       
+        .environmentObject(AppManager())
+        .environmentObject(HealthStore())
 }
