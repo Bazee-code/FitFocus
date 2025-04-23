@@ -7,6 +7,15 @@
 
 import SwiftUI
 
+extension Date: RawRepresentable {
+    public var rawValue: String {
+        self.timeIntervalSinceReferenceDate.description
+    }
+    
+    public init?(rawValue: String) {
+        self = Date(timeIntervalSinceReferenceDate: Double(rawValue) ?? 0.0)
+    }
+}
 
 struct SettingsView: View {
     @AppStorage("defaultStepGoal") private var defaultStepGoal: Int = 5000
@@ -34,15 +43,15 @@ struct SettingsView: View {
                     }
                 }
                 
-//                Section(header: Text("Notifications")) {
-//                    Toggle("Enable Notifications", isOn: $notificationsEnabled)
-//                    
-//                    if notificationsEnabled {
-//                        NavigationLink(destination: NotificationSettingsView()) {
-//                            Text("Configure Notifications")
-//                        }
-//                    }
-//                }
+                Section(header: Text("Notifications")) {
+                    Toggle("Enable Notifications", isOn: $notificationsEnabled)
+                    
+                    if notificationsEnabled {
+                        NavigationLink(destination: NotificationSettingsView()) {
+                            Text("Configure Notifications")
+                        }
+                    }
+                }
                 
                 Section(header: Text("About")) {
                     HStack {
@@ -86,27 +95,27 @@ struct SettingsView: View {
     }
 }
 
-//struct NotificationSettingsView: View {
-//    @AppStorage("goalCompletionNotifications") private var goalCompletionNotifications = true
-//    @AppStorage("dailyReminderNotifications") private var dailyReminderNotifications = true
-//    @AppStorage("reminderTime") private var reminderTime = Date()
-//    
-//    var body: some View {
-//        Form {
-//            Section(header: Text("Notification Types")) {
-//                Toggle("Goal Completion", isOn: $goalCompletionNotifications)
-//                Toggle("Daily Reminders", isOn: $dailyReminderNotifications)
-//            }
-//            
-//            if dailyReminderNotifications {
-//                Section(header: Text("Reminder Time")) {
-//                    DatePicker("Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
-//                }
-//            }
-//        }
-//        .navigationTitle("Notifications")
-//    }
-//}
+struct NotificationSettingsView: View {
+    @AppStorage("goalCompletionNotifications") private var goalCompletionNotifications = true
+    @AppStorage("dailyReminderNotifications") private var dailyReminderNotifications = true
+    @AppStorage("reminderTime") private var reminderTime = Date()
+    
+    var body: some View {
+        Form {
+            Section(header: Text("Notification Types")) {
+                Toggle("Goal Completion", isOn: $goalCompletionNotifications)
+                Toggle("Daily Reminders", isOn: $dailyReminderNotifications)
+            }
+            
+            if dailyReminderNotifications {
+                Section(header: Text("Reminder Time")) {
+                    DatePicker("Time", selection: $reminderTime, displayedComponents: .hourAndMinute)
+                }
+            }
+        }
+        .navigationTitle("Notifications")
+    }
+}
 
 struct HelpView: View {
     var body: some View {
