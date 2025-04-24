@@ -14,33 +14,35 @@ struct StepCountView: View {
     @State private var animationAmount: CGFloat = 1.0
     
     var body: some View {
-        NavigationView {
+        NavigationView{
             VStack(spacing: 40) {
                 // Step counter display
+    
                 VStack {
                     Text("Today's Steps")
-                        .font(.title2)
-                        .fontWeight(.medium)
-                        .foregroundColor(.secondary)
-                    
+                        .font(.title3)
+                        .fontWeight(.bold)
+                        .foregroundColor(.gray)
+                        .padding(.top, -15)
+                        .padding(.bottom, 10)
                     ZStack {
                         Circle()
-                            .stroke(Color.gray.opacity(0.2), lineWidth: 15)
+                            .stroke(Color.red.opacity(0.8), lineWidth: 20)
                             .frame(width: 200, height: 200)
                         
                         Circle()
                             .trim(from: 0, to: min(CGFloat(healthStore.steps) / 10000, 1.0))
+    
                             .stroke(
-                                Color.blue,
-                                style: StrokeStyle(lineWidth: 15, lineCap: .round)
+                                Color.green.opacity(0.8),
+                                style: StrokeStyle(lineWidth: 20, lineCap: .round)
                             )
                             .frame(width: 200, height: 200)
                             .rotationEffect(.degrees(-90))
                             .animation(.easeOut, value: healthStore.steps)
                         
                         VStack {
-//                            Text("\(healthStore.steps)")
-                            Text("1000")
+                            Text("\(healthStore.steps)")
                                 .font(.system(size: 50, weight: .bold, design: .rounded))
                                 .foregroundColor(.primary)
                                 .scaleEffect(animationAmount)
@@ -90,7 +92,7 @@ struct StepCountView: View {
                 Spacer()
             }
             .padding(.top, 30)
-            .navigationTitle("Step Counter")
+            .navigationTitle("Hi Eugene")
             .onAppear {
                 if healthStore.isAuthorized {
                     healthStore.fetchTodaySteps()
@@ -136,7 +138,7 @@ struct AppAccessStatusRow: View {
             Image(systemName: status.iconName)
                 .font(.title2)
                 .frame(width: 40, height: 40)
-                .background(Color.black.opacity(0.5))
+                .background(Color.purple.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
             
             VStack(alignment: .leading) {
