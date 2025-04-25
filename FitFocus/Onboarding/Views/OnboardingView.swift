@@ -15,9 +15,38 @@ struct OnboardingView: View {
                 .ignoresSafeArea()
             
             OnboardingScreen()
-                .animation(.interactiveSpring(response: 1.1, dampingFraction: 0.85, blendDuration: 0.85), value: showWalkThroughScreens)
+            
+            NavBar()
         }
+        .animation(.interactiveSpring(response: 1.1, dampingFraction: 0.85, blendDuration: 0.85), value: showWalkThroughScreens)
 
+    }
+    
+    @ViewBuilder
+    func NavBar() -> some View {
+        HStack{
+            Button{
+                showWalkThroughScreens.toggle()
+            }
+            label : {
+                Image(systemName: "chevron.left")
+                    .font(.title3)
+                    .fontWeight(.semibold)
+                    .foregroundColor(.purple)
+            }
+            
+            Spacer()
+            
+            Button("Skip"){
+                
+            }
+            .font(.title3)
+            .foregroundColor(.purple)
+        }
+        .padding(.horizontal, 15)
+        .padding(.top, 10)
+        .frame(maxHeight: .infinity, alignment: .top)
+        .offset(y: showWalkThroughScreens ? 0 : -120)
     }
     
     @ViewBuilder
