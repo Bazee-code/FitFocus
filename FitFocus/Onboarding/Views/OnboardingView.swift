@@ -138,6 +138,8 @@ struct OnboardingView: View {
     
     @ViewBuilder
     func NavBar() -> some View {
+        let isLast = currentIndex == onboarding.count
+        
         HStack{
             Button{
                 if currentIndex > 0 {
@@ -156,10 +158,12 @@ struct OnboardingView: View {
             Spacer()
             
             Button("Skip"){
-                
+                currentIndex = onboarding.count
             }
             .font(.title3)
             .foregroundColor(.orange)
+            .opacity(isLast ? 0 : 1)
+            .animation(.easeInOut, value: isLast)
         }
         .padding(.horizontal, 15)
         .padding(.top, 10)
