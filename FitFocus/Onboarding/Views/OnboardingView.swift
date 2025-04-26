@@ -65,12 +65,14 @@ struct OnboardingView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
             
             Text(onboardingDescription)
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
             
             Image(intro.imageName)
                 .resizable()
@@ -78,6 +80,7 @@ struct OnboardingView: View {
                 .frame(height: 250, alignment: .top)
                 .padding(.horizontal, 20)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
         }
     }
     
@@ -85,7 +88,11 @@ struct OnboardingView: View {
     func NavBar() -> some View {
         HStack{
             Button{
-                showWalkThroughScreens.toggle()
+                if currentIndex > 0 {
+                    currentIndex -= 1
+                } else {
+                    showWalkThroughScreens.toggle()
+                }
             }
             label : {
                 Image(systemName: "chevron.left")
