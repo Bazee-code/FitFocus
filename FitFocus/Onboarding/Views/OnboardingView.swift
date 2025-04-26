@@ -10,19 +10,30 @@ import SwiftUI
 struct OnboardingView: View {
     @State var showWalkThroughScreens : Bool = false
     @State var currentIndex: Int = 0
+    @State var showHomeView: Bool = false
     
     var body: some View {
         ZStack{
-            Color("BG")
-                .ignoresSafeArea()
-            
-            OnboardingScreen()
-            
-            WalkThroughScreens()
-            
-            NavBar()
-        }
-        .animation(.interactiveSpring(response: 1.1, dampingFraction: 0.85, blendDuration: 0.85), value: showWalkThroughScreens)
+            if showHomeView {
+                Home()
+                    .transition(.move(edge: .trailing))
+            }
+            else {
+                ZStack{
+                    Color("BG")
+                        .ignoresSafeArea()
+                    
+                    OnboardingScreen()
+                    
+                    WalkThroughScreens()
+                    
+                    NavBar()
+                }
+                .animation(.interactiveSpring(response: 1.1, dampingFraction: 0.85, blendDuration: 0.85), value: showWalkThroughScreens)
+                .transition(.move(edge: .leading))
+                }
+            }
+        .animation(.easeInOut(duration: 0.35), value: showHomeView)
 
     }
     
@@ -71,7 +82,12 @@ struct OnboardingView: View {
                             .fill(.orange)
                     }
                     .onTapGesture {
-                        currentIndex += 1
+                        if currentIndex == onboarding.count{
+                            showHomeView = true
+                        }
+                        else {
+                            currentIndex += 1
+                        }
                     }
                     .offset(y : isLast ? -40 : -90)
                     .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: isLast)
@@ -81,15 +97,16 @@ struct OnboardingView: View {
                 
                 HStack(spacing: 5){
                     Text("Already have an account?")
-                        .font(.title3)
+                        .font(.subheadline)
                         .foregroundColor(.gray)
                     
                     Button("Login"){
                         
                     }
-                    .font(.title3)
+                    .font(.subheadline)
                     .foregroundColor(.orange)
                 }
+                .padding(.top, 5)
                 .offset(y: isLast ? -12 : 100)
                 .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: isLast)
             })
@@ -237,4 +254,13 @@ struct OnboardingView: View {
 
 #Preview {
     OnboardingView()
+}
+
+struct Home : View {
+    var body: some View {
+        NavigationStack{
+            Text("")
+                .navigationTitle("Home screen")
+        }
+    }
 }

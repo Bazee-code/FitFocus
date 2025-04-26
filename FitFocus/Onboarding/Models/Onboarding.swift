@@ -14,9 +14,9 @@ struct Onboarding: Identifiable {
 }
 
 var onboarding: [Onboarding] = [
-    .init(imageName: "onboarding1", title: "FitFocus"),
-    .init(imageName: "onboarding2", title: "Track your workouts"),
-    .init(imageName: "onboarding3", title: "Set your goals"),
+    .init(imageName: "Intro4", title: "FitFocus"),
+    .init(imageName: "Intro2", title: "Track your workouts"),
+    .init(imageName: "Intro3", title: "Set your goals"),
 ]
 
 let onboardingTitle = "Fitness meets Productivity"
