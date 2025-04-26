@@ -62,7 +62,7 @@ struct OnboardingView: View {
     func WelcomeView(size: CGSize, index: Int) -> some View {
         
         VStack(spacing: 10){
-            Image("Welcome")
+            Image("Intro3")
                 .resizable()
                 .aspectRatio(contentMode: .fit)
                 .frame(height: 250, alignment: .top)
@@ -76,7 +76,7 @@ struct OnboardingView: View {
                 .offset(x : -size.width * CGFloat(currentIndex - index))
                 .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
             
-            Text("Get more fit and increase your productivity")
+            Text("Get more fit as you increase your productivity")
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
@@ -151,7 +151,7 @@ struct OnboardingView: View {
             let size  = $0.size
             
             VStack(spacing: 10){
-                Image("Intro")
+                Image("Intro2")
                     .resizable()
                     .aspectRatio(contentMode: .fill)
                     .frame(width: size.width, height: size.height / 2, alignment: .center)
@@ -162,6 +162,7 @@ struct OnboardingView: View {
                     .padding(.top, 55)
                 
                 Text(onboardingDescription)
+                    .foregroundColor(.gray)
                     .font(.title2)
                     .fontWeight(.bold)
                     .multilineTextAlignment(.center)
