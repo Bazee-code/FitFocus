@@ -35,6 +35,8 @@ struct OnboardingView: View {
                 ForEach(onboarding.indices, id: \.self){
                     index in ScreenView(size: size, index: index)
                 }
+                
+                WelcomeView(size: size, index: onboarding.count)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(alignment: .bottom){
@@ -57,6 +59,34 @@ struct OnboardingView: View {
     }
     
     @ViewBuilder
+    func WelcomeView(size: CGSize, index: Int) -> some View {
+        
+        VStack(spacing: 10){
+            Image("Welcome")
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(height: 250, alignment: .top)
+                .padding(.horizontal, 20)
+                .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0 : 0.2).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+            
+            Text("Welcome")
+                .font(.title)
+                .fontWeight(.bold)
+                .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+            
+            Text("Get more fit and increase your productivity")
+                .font(.title2)
+                .multilineTextAlignment(.center)
+                .padding(.horizontal, 30)
+                .offset(x : -size.width * CGFloat(currentIndex - index))
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(0.1).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+            
+        }
+    }
+    
+    @ViewBuilder
     func ScreenView(size: CGSize, index: Int) -> some View {
         let intro = onboarding[index]
         
@@ -65,14 +95,14 @@ struct OnboardingView: View {
                 .font(.title)
                 .fontWeight(.bold)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
             
             Text(onboardingDescription)
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(0.1).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
             
             Image(intro.imageName)
                 .resizable()
@@ -80,7 +110,7 @@ struct OnboardingView: View {
                 .frame(height: 250, alignment: .top)
                 .padding(.horizontal, 20)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0 : 0.2).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
         }
     }
     
