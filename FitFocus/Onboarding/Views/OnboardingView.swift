@@ -76,6 +76,23 @@ struct OnboardingView: View {
                     .offset(y : isLast ? -40 : -90)
                     .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: isLast)
             }
+            .overlay(alignment: .bottom, content: {
+                let isLast = currentIndex == onboarding.count
+                
+                HStack(spacing: 5){
+                    Text("Already have an account?")
+                        .font(.title3)
+                        .foregroundColor(.gray)
+                    
+                    Button("Login"){
+                        
+                    }
+                    .font(.title3)
+                    .foregroundColor(.orange)
+                }
+                .offset(y: isLast ? -12 : 100)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: isLast)
+            })
             .offset(y: showWalkThroughScreens ? 0 : size.height)
         }
     }
@@ -90,22 +107,23 @@ struct OnboardingView: View {
                 .frame(height: 250, alignment: .top)
                 .padding(.horizontal, 20)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0 : 0.2).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0 : 0.2).delay(currentIndex == index ? 0.1 : 0), value: currentIndex)
             
             Text("Welcome")
                 .font(.title)
                 .fontWeight(.bold)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(0.1).delay(currentIndex == index ? 0.1 : 0), value: currentIndex)
             
             Text("Get more fit as you increase your productivity")
                 .font(.title2)
                 .multilineTextAlignment(.center)
                 .padding(.horizontal, 30)
                 .offset(x : -size.width * CGFloat(currentIndex - index))
-                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(0.1).delay(currentIndex == index ? 0.2 : 0), value: currentIndex)
+                .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5).delay(currentIndex == index ? 0.2 : 0).delay(currentIndex == index ? 0.1 : 0), value: currentIndex)
             
         }
+        .offset(y: -30)
     }
     
     @ViewBuilder
