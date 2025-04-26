@@ -48,7 +48,7 @@ struct OnboardingView: View {
                             .fill(.orange)
                     }
                     .onTapGesture {
-                        
+                        currentIndex += 1
                     }
                     .offset(y : -90)
             }
