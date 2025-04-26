@@ -30,6 +30,7 @@ struct OnboardingView: View {
     func WalkThroughScreens() -> some View {
         GeometryReader{
             let size = $0.size
+            let isLast = currentIndex == onboarding.count
             
             ZStack{
                 ForEach(onboarding.indices, id: \.self){
@@ -40,19 +41,39 @@ struct OnboardingView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .overlay(alignment: .bottom){
-                Image(systemName: "chevron.right")
-                    .font(.title3)
-                    .fontWeight(.semibold)
-                    .frame(width: 55, height: 55)
+                ZStack{
+                    Image(systemName: "chevron.right")
+                        .font(.title3)
+                        .fontWeight(.semibold)
+                        .scaleEffect(!isLast ? 1 : 0.001)
+                        .opacity(!isLast ? 1 : 0)
+                    
+                    HStack{
+                        Text("Sign up")
+                            .font(.title3)
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                        
+                        Image(systemName: "arrow.right")
+                            .font(.title3)
+                            .fontWeight(.semibold)
+                            .foregroundStyle(.white)
+                    }
+                    .padding(.horizontal, 15)
+                    .scaleEffect(isLast ? 1 : 0.001)
+                    .frame(height: isLast ? nil : 0)
+                    .opacity(isLast ? 1 : 0)
+                }
+                .frame(width: isLast ? size.width / 1.5 : 55, height: isLast ? 50 : 55)
                     .foregroundColor(.white)
                     .background{
-                        RoundedRectangle(cornerRadius: 30, style: .circular)
+                        RoundedRectangle(cornerRadius: isLast ? 10 : 30, style: isLast ? .continuous : .circular)
                             .fill(.orange)
                     }
                     .onTapGesture {
                         currentIndex += 1
                     }
-                    .offset(y : -90)
+                    .offset(y : isLast ? -40 : -90)
             }
             .offset(y: showWalkThroughScreens ? 0 : size.height)
         }
