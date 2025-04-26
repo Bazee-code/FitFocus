@@ -74,6 +74,7 @@ struct OnboardingView: View {
                         currentIndex += 1
                     }
                     .offset(y : isLast ? -40 : -90)
+                    .animation(.interactiveSpring(response: 0.9, dampingFraction: 0.8, blendDuration: 0.5), value: isLast)
             }
             .offset(y: showWalkThroughScreens ? 0 : size.height)
         }
