@@ -14,12 +14,11 @@ struct AnimatedGradientBackground: View {
         LinearGradient(
             gradient: Gradient(colors: [
                 Color(hex: "#0F3460"),
-//                Color(hex: "#FED881"),
                 Color(hex:"16213E"),
                 Color(hex: "#FFA62B")
             ]),
-            startPoint: animateGradient ? .topLeading : .bottomLeading,
-            endPoint: animateGradient ? .bottomTrailing : .topTrailing
+            startPoint: animateGradient ? .topLeading : .bottomTrailing,
+            endPoint: animateGradient ? .bottomTrailing : .center
         )
         .ignoresSafeArea()
         .onAppear {

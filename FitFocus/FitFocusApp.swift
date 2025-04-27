@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import HealthKit
+import ManagedSettings
 
 @main
 struct FitFocusApp: App {

@@ -31,30 +31,32 @@ struct ContentView: View {
     @State private var selectedTab = 0
     
     var body: some View {
-        TabView(selection: $selectedTab) {
-            StepCountView()
-                .tabItem {
-                    Label("Steps", systemImage: "figure.walk")
-                }
-                .tag(0)
-            
-            AppCategoryListView()
-                .tabItem {
-                    Label("Apps", systemImage: "app.fill")
-                }
-                .tag(1)
-            
-            RestrictedAppsView()
-                .tabItem {
-                    Label("Restricted", systemImage: "lock.fill")
-                }
-                .tag(2)
-            
-            SettingsView()
-                .tabItem {
-                    Label("Settings", systemImage: "gear")
-                }
-                .tag(3)
+        NavigationStack{
+            TabView(selection: $selectedTab) {
+                StepCountView()
+                    .tabItem {
+                        Label("Steps", systemImage: "figure.walk")
+                    }
+                    .tag(0)
+                
+                AppCategoryListView()
+                    .tabItem {
+                        Label("Apps", systemImage: "app.fill")
+                    }
+                    .tag(1)
+                
+                RestrictedAppsView()
+                    .tabItem {
+                        Label("Restricted", systemImage: "lock.fill")
+                    }
+                    .tag(2)
+                
+                SettingsView()
+                    .tabItem {
+                        Label("Settings", systemImage: "gear")
+                    }
+                    .tag(3)
+            }
         }
     }
 }
@@ -175,7 +177,7 @@ class AppManager: ObservableObject {
         // In a real app, we'd load this from UserDefaults or another persistence method
         // Mock data for now
         restrictedApps = [
-            RestrictedApp(app: AppInfo(id: "com.facebook.app", name: "Facebook", icon: "bubble.left.fill"),
+            RestrictedApp(app: AppInfo(id: "com.netflix.app", name: "Netflix", icon: "tv.fill"),
                           stepGoal: 5000)
         ]
     }
