@@ -13,9 +13,10 @@ struct AnimatedGradientBackground: View {
     var body: some View {
         LinearGradient(
             gradient: Gradient(colors: [
-                Color(hex: "#FFA62B"),
-                Color(hex: "#ED9121"),
-                Color(hex: "#0F3460")
+                Color(hex: "#0F3460"),
+//                Color(hex: "#FED881"),
+                Color(hex:"16213E"),
+                Color(hex: "#FFA62B")
             ]),
             startPoint: animateGradient ? .topLeading : .bottomLeading,
             endPoint: animateGradient ? .bottomTrailing : .topTrailing
