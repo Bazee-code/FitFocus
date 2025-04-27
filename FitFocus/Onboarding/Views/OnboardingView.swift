@@ -15,8 +15,10 @@ struct OnboardingView: View {
     var body: some View {
         ZStack{
             if showHomeView {
-                Home()
+                ContentView()
                     .transition(.move(edge: .trailing))
+                    .environmentObject(HealthStore())
+                    .environmentObject(AppManager())
             }
             else {
                 ZStack{
