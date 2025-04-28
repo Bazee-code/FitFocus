@@ -13,16 +13,16 @@ struct AnimatedGradientBackground: View {
     var body: some View {
         LinearGradient(
             gradient: Gradient(colors: [
-                Color(hex: "#0F3460"),
+                Color(hex: "#800000"),
+                Color(hex: "#800000"),
                 Color(hex:"16213E"),
-                Color(hex: "#FFA62B")
             ]),
             startPoint: animateGradient ? .topLeading : .bottomTrailing,
             endPoint: animateGradient ? .bottomTrailing : .center
         )
         .ignoresSafeArea()
         .onAppear {
-            withAnimation(.linear(duration: 5.0).repeatForever(autoreverses: true)) {
+            withAnimation(.linear(duration: 4.0).repeatForever(autoreverses: true)) {
                 animateGradient.toggle()
             }
         }
