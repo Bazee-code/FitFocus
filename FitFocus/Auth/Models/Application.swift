@@ -1,8 +1,8 @@
 //
 //  Application.swift
-//  GoogleSignInFirebaseSwiftUI
+//  FitFocus
 //
-//  Created by Sheehan Munim on 6/9/24.
+//  Created by Eugene Obazee on 27/04/2025.
 //
 
 import SwiftUI
@@ -21,6 +21,5 @@ final class Application_utility{
         
         return root
     }
-    
     
 }

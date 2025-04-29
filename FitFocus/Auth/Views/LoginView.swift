@@ -13,21 +13,16 @@ import GoogleSignInSwift
 import HealthKit
 import ManagedSettings
 
-//LOGOUT
-//Button{
-//                Task{
-//                    do{
-//                        try await AuthenticationView().logout()
-//                    } catch let e {
-//                        
-//                        err = e.localizedDescription
-//                    }
-//                }
-
 struct AuthContentView: View {
     @State private var currentView: AuthView = .login
     @State private var transitionDirection: TransitionDirection = .forward
     @Environment(\.colorScheme) private var colorScheme
+    
+    @State private var userInfo = Auth.auth().currentUser
+    
+    init() {
+           print("userInfo: \(userInfo)")
+       }
         
     var body: some View {
         ZStack {

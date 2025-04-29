@@ -9,14 +9,11 @@ import SwiftUI
 import HealthKit
 import ManagedSettings
 import Firebase
+import FirebaseCore
+import FirebaseAuth
 import GoogleSignIn
 
 @main
-
-//LOGIN CONDITIONS
-//NEW USER -> onboard -> sign up -> login -> home
-//RETURN USER [NOT AUTH] -> login -> home
-//RETURN USER [AUTH] -> home
 
 struct FitFocusApp: App {
     @StateObject private var healthStore = HealthStore()
@@ -26,13 +23,7 @@ struct FitFocusApp: App {
     
     var body: some Scene {
         WindowGroup {
-//            ContentView()
-//                .environmentObject(healthStore)
-//                .environmentObject(appManager)
-//                .onAppear {
-//                    healthStore.requestAuthorization()
-//                }
-            OnboardingView()
+            InitialView()
         }
     }
 }
