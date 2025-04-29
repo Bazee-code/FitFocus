@@ -10,6 +10,8 @@ import Firebase
 import FirebaseAuth
 import GoogleSignIn
 import GoogleSignInSwift
+import HealthKit
+import ManagedSettings
 
 //LOGOUT
 //Button{
@@ -30,7 +32,7 @@ struct AuthContentView: View {
     var body: some View {
         ZStack {
             // Animated background gradient
-            AnimatedGradientBackground()
+//            AnimatedGradientBackground()
             
             VStack {
                 switch currentView {
@@ -119,104 +121,125 @@ struct LoginView: View {
     var onSignupTap: () -> Void
     var onForgotPasswordTap: () -> Void
     
+    @EnvironmentObject var healthStore: HealthStore
+    @EnvironmentObject var appManager: AppManager
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 24) {
-                VStack(spacing: 8) {
-                    Text("Welcome")
-                        .font(.system(size: 32, weight: .bold))
-                        .foregroundColor(.white)
-                        .opacity(showLoginAnimation ? 1 : 0)
-                        .offset(y: showLoginAnimation ? 0 : -30)
-                        .animation(Animation.spring(response: 0.5, dampingFraction: 0.8).delay(0.1), value: showLoginAnimation)
-                    
-                    Text("Sign in to continue")
-                        .font(.system(size: 16))
-                        .foregroundColor(.white.opacity(0.7))
-                        .opacity(showLoginAnimation ? 1 : 0)
-                        .offset(y: showLoginAnimation ? 0 : -20)
-                        .animation(Animation.spring(response: 0.5, dampingFraction: 0.8).delay(0.2), value: showLoginAnimation)
-                }
-                .padding(.top, 60)
-                .padding(.bottom, 40)
-                
-                // Card View for form fields
+        NavigationStack{
+            ScrollView {
                 VStack(spacing: 24) {
-                    ModernTextField(placeholder: "Email", iconName: "envelope", text: $email)
+                    VStack(spacing: 8) {
+                        Text("Welcome")
+                            .font(.system(size: 32, weight: .bold))
+                            .foregroundColor(.white)
+                            .opacity(showLoginAnimation ? 1 : 0)
+                            .offset(y: showLoginAnimation ? 0 : -30)
+                            .animation(Animation.spring(response: 0.5, dampingFraction: 0.8).delay(0.1), value: showLoginAnimation)
+                        
+                        Text("Sign in to continue")
+                            .font(.system(size: 16))
+                            .foregroundColor(.white.opacity(0.7))
+                            .opacity(showLoginAnimation ? 1 : 0)
+                            .offset(y: showLoginAnimation ? 0 : -20)
+                            .animation(Animation.spring(response: 0.5, dampingFraction: 0.8).delay(0.2), value: showLoginAnimation)
+                    }
+                    .padding(.top, 60)
+                    .padding(.bottom, 40)
+                    
+                    // Card View for form fields
+                    VStack(spacing: 24) {
+                        ModernTextField(placeholder: "Email", iconName: "envelope", text: $email)
+                            .opacity(showingFields ? 1 : 0)
+                            .offset(y: showingFields ? 0 : 20)
+                            .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.3), value: showingFields)
+                        
+                        ModernTextField(placeholder: "Password", iconName: "lock", text: $password, isSecure: true)
+                            .opacity(showingFields ? 1 : 0)
+                            .offset(y: showingFields ? 0 : 20)
+                            .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.4), value: showingFields)
+                        
+                        HStack {
+                            Spacer()
+                            Button(action: onForgotPasswordTap) {
+                                Text("Forgot Password?")
+                                    .font(.system(size: 14, weight: .medium))
+                                    .foregroundColor(Color(hex: "4CC2FF"))
+                            }
+                            .opacity(showingFields ? 1 : 0)
+                            .animation(Animation.spring().delay(0.5), value: showingFields)
+                            .padding(.trailing)
+                        }
+                        
+                        ModernButton(
+                            title: "LOG IN",
+                            action: {
+                                // Login action would go here
+                                login()
+                                print("Login with: \(email), \(password)")
+                            },
+                            isPrimary: true
+                        )
                         .opacity(showingFields ? 1 : 0)
                         .offset(y: showingFields ? 0 : 20)
-                        .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.3), value: showingFields)
+                        .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.5), value: showingFields)
+                        .padding(.top, 10)
+                    }
                     
-                    ModernTextField(placeholder: "Password", iconName: "lock", text: $password, isSecure: true)
-                        .opacity(showingFields ? 1 : 0)
-                        .offset(y: showingFields ? 0 : 20)
-                        .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.4), value: showingFields)
+                    Spacer(minLength: 30)
                     
-                    HStack {
-                        Spacer()
-                        Button(action: onForgotPasswordTap) {
-                            Text("Forgot Password?")
-                                .font(.system(size: 14, weight: .medium))
-                                .foregroundColor(Color(hex: "4CC2FF"))
+                    if !loginError.isEmpty{
+                        Text(loginError)
+                            .foregroundColor(.red)
+                            .padding()
+                    }
+                    
+                    NavigationLink(value: isLoggedIn){
+                        EmptyView()
+                    }
+                    .navigationDestination(isPresented: $isLoggedIn){
+                        ContentView()
+                            .navigationBarBackButtonHidden(true)
+                            .environmentObject(HealthStore())
+                            .environmentObject(AppManager())
+                    }
+                    
+                    // Social sign-in section
+                    VStack(spacing: 16) {
+                        DividerWithText(text: "OR CONTINUE WITH")
+                            .opacity(showingFields ? 1 : 0)
+                            .animation(Animation.spring().delay(0.6), value: showingFields)
+                        
+                        SocialSignInButton(type: .apple) {
+                            print("Apple Sign In tapped")
                         }
                         .opacity(showingFields ? 1 : 0)
-                        .animation(Animation.spring().delay(0.5), value: showingFields)
-                        .padding(.trailing)
-                    }
-                    
-                    ModernButton(
-                        title: "LOG IN",
-                        action: {
-                            // Login action would go here
-                            login()
-                            print("Login with: \(email), \(password)")
-                        },
-                        isPrimary: true
-                    )
-                    .opacity(showingFields ? 1 : 0)
-                    .offset(y: showingFields ? 0 : 20)
-                    .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.5), value: showingFields)
-                    .padding(.top, 10)
-                }
-                
-                Spacer(minLength: 30)
-                
-                // Social sign-in section
-                VStack(spacing: 16) {
-                    DividerWithText(text: "OR CONTINUE WITH")
+                        .offset(y: showingFields ? 0 : 20)
+                        .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.7), value: showingFields)
+                        
+                        SocialSignInButton(type: .google) {
+                            print("Google Sign In tapped")
+                            googleSignIn.signInWithGoogle()
+                        }
                         .opacity(showingFields ? 1 : 0)
-                        .animation(Animation.spring().delay(0.6), value: showingFields)
+                        .offset(y: showingFields ? 0 : 20)
+                        .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.8), value: showingFields)
+                    }
                     
-                    SocialSignInButton(type: .apple) {
-                        print("Apple Sign In tapped")
+                    HStack {
+                        Text("Don't have an account?")
+                            .foregroundColor(.white.opacity(0.7))
+                        
+                        Button(action: onSignupTap) {
+                            Text("Sign Up")
+                                .fontWeight(.semibold)
+                                .foregroundColor(Color(hex: "4CC2FF"))
+                        }
                     }
                     .opacity(showingFields ? 1 : 0)
-                    .offset(y: showingFields ? 0 : 20)
-                    .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.7), value: showingFields)
-                    
-                    SocialSignInButton(type: .google) {
-                        print("Google Sign In tapped")
-                        googleSignIn.signInWithGoogle()
-                    }
-                    .opacity(showingFields ? 1 : 0)
-                    .offset(y: showingFields ? 0 : 20)
-                    .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.8), value: showingFields)
+                    .animation(Animation.spring().delay(0.9), value: showingFields)
+                    .padding(.top, 40)
+                    .padding(.bottom, 20)
                 }
-                
-                HStack {
-                    Text("Don't have an account?")
-                        .foregroundColor(.white.opacity(0.7))
-                    
-                    Button(action: onSignupTap) {
-                        Text("Sign Up")
-                            .fontWeight(.semibold)
-                            .foregroundColor(Color(hex: "4CC2FF"))
-                    }
-                }
-                .opacity(showingFields ? 1 : 0)
-                .animation(Animation.spring().delay(0.9), value: showingFields)
-                .padding(.top, 40)
-                .padding(.bottom, 20)
             }
         }
         .onAppear {

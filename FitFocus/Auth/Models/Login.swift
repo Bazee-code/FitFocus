@@ -7,6 +7,14 @@
 
 import SwiftUI
 
+enum AuthView {
+    case login, signup, resetPassword
+}
+
+enum TransitionDirection {
+    case forward, backward
+}
+
 struct AnimatedGradientBackground: View {
     @State private var animateGradient = false
     
@@ -42,9 +50,10 @@ struct ModernTextField: View {
             if isFocused || !text.isEmpty {
                 Text(placeholder)
                     .font(.system(size: 14, weight: .medium))
-                    .foregroundColor(Color(hex: "4CC2FF"))
-                    .padding(.leading, 36)
+                    .foregroundColor(.white)
+                    .padding(.bottom, 5)
                     .transition(.move(edge: .top).combined(with: .opacity))
+                    .fontWeight(.semibold)
             }
             
             HStack(spacing: 10) {
@@ -128,6 +137,7 @@ extension Color {
 }
 
 struct SocialSignInButton: View {
+    @State private var vm = AuthenticationView()
     enum SocialType {
         case apple, google
     }
@@ -275,5 +285,19 @@ struct DividerWithText: View {
                 .frame(maxWidth: .infinity)
         }
         .padding(.horizontal)
+    }
+}
+
+// Extension for placeholder in TextField
+extension View {
+    func placeholder<Content: View>(
+        when shouldShow: Bool,
+        alignment: Alignment = .leading,
+        @ViewBuilder placeholder: () -> Content
+    ) -> some View {
+        ZStack(alignment: alignment) {
+            placeholder().opacity(shouldShow ? 1 : 0)
+            self
+        }
     }
 }
