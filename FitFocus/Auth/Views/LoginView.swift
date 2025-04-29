@@ -6,20 +6,27 @@
 //
 
 import SwiftUI
+import Firebase
+import FirebaseAuth
+import GoogleSignIn
+import GoogleSignInSwift
+
+//LOGOUT
+//Button{
+//                Task{
+//                    do{
+//                        try await AuthenticationView().logout()
+//                    } catch let e {
+//                        
+//                        err = e.localizedDescription
+//                    }
+//                }
 
 struct AuthContentView: View {
     @State private var currentView: AuthView = .login
     @State private var transitionDirection: TransitionDirection = .forward
     @Environment(\.colorScheme) private var colorScheme
-    
-    enum AuthView {
-        case login, signup, resetPassword
-    }
-    
-    enum TransitionDirection {
-        case forward, backward
-    }
-    
+        
     var body: some View {
         ZStack {
             // Animated background gradient
@@ -100,9 +107,14 @@ struct AuthContentView: View {
 struct LoginView: View {
     @State private var email = ""
     @State private var password = ""
+    @State private var loginError = ""
+    @State private var isLoggedIn = false
+    
     @State private var showLoginAnimation = false
     @State private var showingFields = false
     @Environment(\.colorScheme) private var colorScheme
+    
+    @State private var googleSignIn = AuthenticationView()
     
     var onSignupTap: () -> Void
     var onForgotPasswordTap: () -> Void
@@ -156,6 +168,7 @@ struct LoginView: View {
                         title: "LOG IN",
                         action: {
                             // Login action would go here
+                            login()
                             print("Login with: \(email), \(password)")
                         },
                         isPrimary: true
@@ -183,6 +196,7 @@ struct LoginView: View {
                     
                     SocialSignInButton(type: .google) {
                         print("Google Sign In tapped")
+                        googleSignIn.signInWithGoogle()
                     }
                     .opacity(showingFields ? 1 : 0)
                     .offset(y: showingFields ? 0 : 20)
@@ -218,21 +232,17 @@ struct LoginView: View {
             }
         }
     }
-}
-
-
-// Extension for placeholder in TextField
-extension View {
-    func placeholder<Content: View>(
-        when shouldShow: Bool,
-        alignment: Alignment = .leading,
-        @ViewBuilder placeholder: () -> Content
-    ) -> some View {
-        ZStack(alignment: alignment) {
-            placeholder().opacity(shouldShow ? 1 : 0)
-            self
-        }
-    }
+    
+    func login() {
+          Auth.auth().signIn(withEmail: email, password: password) { authResult, error in
+          
+              if let error = error {
+                  loginError = error.localizedDescription
+              }
+              
+              isLoggedIn = true
+          }
+      }
 }
 
 #Preview {

@@ -14,7 +14,6 @@ class AuthenticationView: ObservableObject{
     
     @Published var isLoginSuccessed = false
     
-    
     func signInWithGoogle(){
         
         guard let clientID = FirebaseApp.app()?.options.clientID else { return }
