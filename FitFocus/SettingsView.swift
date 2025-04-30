@@ -23,6 +23,10 @@ struct SettingsView: View {
     @State private var showResetAlert = false
     @EnvironmentObject var appManager: AppManager
     
+    @State private var err : String = ""
+    
+//    @EnvironmentObject var authViewModel: AuthenticationViewModel
+    
     var body: some View {
         NavigationView {
             Form {
@@ -78,6 +82,25 @@ struct SettingsView: View {
                             .foregroundColor(.red)
                     }
                 }
+                ModernButton(
+                    title: "LOG OUT",
+                    action: {
+//                         Logout action would go here
+                        Task{
+                                do{
+                                    try await AuthenticationView().logout()
+                                } catch let e {
+                                    
+                                    err = e.localizedDescription
+                                }
+                            }
+//                        signOut()
+                        print("Logout clicked")
+                    },
+                    isPrimary: true
+                )
+                .animation(Animation.spring(response: 0.6, dampingFraction: 0.8).delay(0.5), value: 2)
+                .padding(.top, 10)
             }
             .navigationTitle("Settings")
             .alert(isPresented: $showResetAlert) {
@@ -93,6 +116,12 @@ struct SettingsView: View {
             }
         }
     }
+    
+//    private func signOut() {
+//        Task {
+//            await authViewModel.signOut()
+//        }
+//    }
 }
 
 struct NotificationSettingsView: View {
@@ -165,4 +194,5 @@ struct PrivacyView: View {
 
 #Preview {
     SettingsView()
+//        .environmentObject(AuthenticationViewModel())
 }
