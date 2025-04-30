@@ -242,4 +242,5 @@ struct RestrictedApp: Identifiable {
     ContentView()
         .environmentObject(HealthStore())
         .environmentObject(AppManager())
+        .environmentObject(AuthenticationView())
 }

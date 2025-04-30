@@ -13,6 +13,8 @@ struct StepCountView: View {
     @EnvironmentObject var healthStore: HealthStore
     @State private var animationAmount: CGFloat = 1.0
     
+    @EnvironmentObject var authViewModel: AuthenticationView
+    
     var body: some View {
         NavigationView{
             VStack(spacing: 40) {
@@ -87,7 +89,7 @@ struct StepCountView: View {
                 }
             }
             .padding(.top, 30)
-            .navigationTitle("Hi Eugene")
+            .navigationTitle("Hi, \(userName)")
             .onAppear {
                 if healthStore.isAuthorized {
                     healthStore.fetchTodaySteps()
@@ -97,6 +99,15 @@ struct StepCountView: View {
             }
         }
     }
+    
+    private var userName: String {
+        if let displayName = authViewModel.getCurrentUser()?.displayName, !displayName.isEmpty {
+            return displayName
+        } else {
+            return "User"
+        }
+    }
+
     
     // This would normally come from the AppManager
     // Using mock data for demonstration
@@ -167,4 +178,5 @@ struct AppAccessStatusRow: View {
 #Preview {
     StepCountView()
         .environmentObject(HealthStore())
+        .environmentObject(AuthenticationView())
 }
