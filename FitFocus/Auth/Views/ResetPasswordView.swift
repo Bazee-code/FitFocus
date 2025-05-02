@@ -13,6 +13,7 @@ struct ResetPasswordView: View {
     @State private var showingFields = false
     @State private var emailSent = false
     @Environment(\.colorScheme) private var colorScheme
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     var onBackTap: () -> Void
     
@@ -87,8 +88,11 @@ struct ResetPasswordView: View {
             ModernButton(
                 title: "SEND RESET LINK",
                 action: {
-                    withAnimation(.spring()) {
-                        emailSent = true
+                    Task {
+                        await authViewModel.sendPasswordReset(email: email)
+                        withAnimation(.spring()) {
+                            emailSent = true
+                        }
                     }
                 },
                 isPrimary: true
