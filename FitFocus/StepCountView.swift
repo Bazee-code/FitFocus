@@ -13,6 +13,7 @@ struct StepCountView: View {
     @EnvironmentObject var healthStore: HealthStore
     @State private var animationAmount: CGFloat = 1.0
     @State private var showLoginAnimation = false
+    @State private var animate = false
     
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
@@ -20,35 +21,26 @@ struct StepCountView: View {
         NavigationStack{
             VStack(spacing: 40) {
                 ScrollView(showsIndicators: false){
-                    // Step counter display
-//                    VStack(alignment: .leading){
-//                        Text("Hi there brother")
-//                            .font(.system(size: 25))
-//                            .foregroundColor(.white.opacity(0.7))
-//                            .opacity(showLoginAnimation ? 1 : 0)
-//                            .offset(y: showLoginAnimation ? 0 : -20)
-//                            .animation(Animation.spring(response: 0.5, dampingFraction: 0.8).delay(0.2), value: showLoginAnimation)
-//                    }
                     
                     VStack {
             
                         ZStack {
-                            Circle()
-                                .stroke(Color.red.opacity(0.8), lineWidth: 20)
-                                .frame(width: 200, height: 200)
-                            
-                            Circle()
-                                .trim(from: 0, to: min(CGFloat(healthStore.steps) / 10000, 1.0))
-                            
-                                .stroke(
-                                    Color.green.opacity(0.8),
-                                    style: StrokeStyle(lineWidth: 20, lineCap: .round)
-                                )
-                                .frame(width: 200, height: 200)
-                                .rotationEffect(.degrees(-90))
-                                .animation(.easeInOut, value: healthStore.steps)
-                            
                             stepCounterCard
+//                            Circle()
+//                                .stroke(Color.red.opacity(0.8), lineWidth: 20)
+//                                .frame(width: 200, height: 200)
+//                            
+//                            Circle()
+//                                .trim(from: 0, to: min(CGFloat(healthStore.steps) / 10000, 1.0))
+//                            
+//                                .stroke(
+//                                    Color.green.opacity(0.8),
+//                                    style: StrokeStyle(lineWidth: 20, lineCap: .round)
+//                                )
+//                                .frame(width: 200, height: 200)
+//                                .rotationEffect(.degrees(-90))
+//                                .animation(.easeInOut, value: healthStore.steps)
+                            
 //                            VStack {
 //                                Text("\(healthStore.steps)")
 //                                    .font(.system(size: 50, weight: .bold, design: .rounded))
@@ -100,7 +92,7 @@ struct StepCountView: View {
                     Spacer()
                 }
             }
-//            .navigationTitle("Hi \(userName)")
+            .navigationTitle("Hi \(userName)")
             .padding(.top, 30)
             .onAppear {
                 if healthStore.isAuthorized {
@@ -124,10 +116,18 @@ struct StepCountView: View {
     private var stepCounterCard: some View {
         VStack {
             HStack {
-                Image(systemName: "figure.walk")
-                    .font(.title)
-                    .foregroundColor(.mint)
-//                    .symbolEffect(.breathe, options: .repeating)
+//                Image(systemName: "figure.walk")
+//                    .font(.title)
+//                    .foregroundColor(.mint)
+//                    .rotationEffect(.degrees(animate ? -10 : 10))
+//                                .offset(y: animate ? -5 : 5)
+//                            // bounce effect
+//                                .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: animate)
+//                                .onAppear {
+//                                    animate = true
+//                                }
+                
+                RealisticWalkingView()
                 
                 Text("Today's Steps")
                     .font(.headline)
@@ -172,18 +172,18 @@ struct StepCountView: View {
             }
             .padding()
             
-//            Text("Goal: 5000 steps")
-//                .font(.callout)
-//                .foregroundColor(.secondary)
-//                .padding(.top, 5)
+            Text("Default Goal: 5000 steps")
+                .font(.callout)
+                .foregroundColor(.secondary)
+                .padding(.top, 5)
             
-//            if healthStore.steps >= 5000 {
-//                Label("Goal Achieved! Apps Unlocked", systemImage: "checkmark.circle.fill")
-//                    .font(.callout)
-//                    .foregroundColor(.green)
-//                    .padding(.top, 5)
-//                    .transition(.scale.combined(with: .opacity))
-//            }
+            if healthStore.steps >= 5000 {
+                Label("Goal Achieved! Apps Unlocked", systemImage: "checkmark.circle.fill")
+                    .font(.callout)
+                    .foregroundColor(.green)
+                    .padding(.top, 5)
+                    .transition(.scale.combined(with: .opacity))
+            }
         }
         .padding()
         .background(
@@ -209,6 +209,60 @@ struct StepCountView: View {
     }
 }
 
+struct RealisticWalkingView: View {
+    @State private var isWalking = false
+
+    var body: some View {
+        VStack {
+            ZStack {
+                // Torso
+                Rectangle()
+                    .frame(width: 8, height: 8)
+                    .foregroundColor(.mint)
+
+                // Head
+                Circle()
+                    .frame(width: 7, height: 7)
+                    .foregroundColor(.mint)
+                    .offset(y: -8)
+
+                // Left Arm
+                Rectangle()
+                    .frame(width: 4, height: 5)
+                    .foregroundColor(.mint)
+                    .rotationEffect(.degrees(isWalking ? 30 : -30), anchor: .top)
+                    .offset(x: -3, y: 5)
+
+                // Right Arm
+                Rectangle()
+                    .frame(width: 4, height: 5)
+                    .foregroundColor(.mint)
+                    .rotationEffect(.degrees(isWalking ? -30 : 30), anchor: .top)
+                    .offset(x: 3, y: 5)
+
+                // Left Leg
+                Rectangle()
+                    .frame(width: 4, height: 10)
+                    .foregroundColor(.mint)
+                    .rotationEffect(.degrees(isWalking ? -30 : 30), anchor: .top)
+                    .offset(x: -3, y: 13)
+
+                // Right Leg
+                Rectangle()
+                    .frame(width: 4, height: 10)
+                    .foregroundColor(.mint)
+                    .rotationEffect(.degrees(isWalking ? 30 : -30), anchor: .top)
+                    .offset(x: 3, y: 13)
+            }
+            .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: isWalking)
+        }
+        .onAppear {
+            isWalking.toggle()
+        }
+    }
+}
+
+
 struct AppStatus: Identifiable {
     let id = UUID()
     let appName: String
@@ -229,17 +283,19 @@ struct AppAccessStatusRow: View {
             Image(systemName: status.iconName)
                 .font(.title2)
                 .frame(width: 40, height: 40)
-                .background(Color.purple.opacity(0.5))
+                .background(Color.mint.opacity(0.5))
                 .clipShape(RoundedRectangle(cornerRadius: 8))
+                .padding(.horizontal, 5)
             
             VStack(alignment: .leading) {
                 Text(status.appName)
                     .font(.headline)
-                    .foregroundColor(.black)
+                    .foregroundColor(.gray)
+                    .fontWeight(.semibold)
                 
                 Text("Goal: \(status.goalSteps) steps")
                     .font(.subheadline)
-                    .foregroundColor(.gray)
+                    .foregroundColor(.gray.opacity(0.7))
             }
             
             Spacer()
