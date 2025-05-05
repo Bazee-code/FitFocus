@@ -29,7 +29,7 @@ struct InitialView: View {
     }
     
     var body: some View {
-        NavigationStack {
+//        NavigationStack {
             // Show the appropriate view based on authentication state
             Group {
                 if authViewModel.state == .signedIn ||
@@ -49,7 +49,7 @@ struct InitialView: View {
                 }
             }
             .animation(.easeInOut, value: authViewModel.state)
-        }
+//        }
         .overlay {
             // Show loading indicator when ViewModel is loading
             if authViewModel.isLoading {
