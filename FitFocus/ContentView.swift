@@ -28,17 +28,18 @@ import ManagedSettings
 struct ContentView: View {
     @EnvironmentObject var healthStore: HealthStore
     @EnvironmentObject var appManager: AppManager
+    @EnvironmentObject var authViewModel: AuthenticationViewModel
+    
     @State private var selectedTab = 0
     
     var body: some View {
-        NavigationStack{
             TabView(selection: $selectedTab) {
-                StepCountView()
-                    .tabItem {
-                        Label("Steps", systemImage: "figure.walk")
-                    }
-                    .tag(0)
-                
+                    StepCountView()
+                        .tabItem {
+                            Label("Steps", systemImage: "figure.walk")
+                        }
+                        .tag(0)
+
                 AppCategoryListView()
                     .tabItem {
                         Label("Apps", systemImage: "app.fill")
@@ -57,7 +58,7 @@ struct ContentView: View {
                     }
                     .tag(3)
             }
-        }
+
     }
 }
 
@@ -242,5 +243,5 @@ struct RestrictedApp: Identifiable {
     ContentView()
         .environmentObject(HealthStore())
         .environmentObject(AppManager())
-        .environmentObject(AuthenticationView())
+        .environmentObject(AuthenticationViewModel())
 }
