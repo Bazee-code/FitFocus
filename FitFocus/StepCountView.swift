@@ -16,6 +16,9 @@ struct StepCountView: View {
     @State private var animate = false
     @State private var showSheet = false
     @State private var flicker = false
+    @State private var animateTrigger = false
+    @State private var number = 5
+    @State private var timer: Timer?
     
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
@@ -149,10 +152,16 @@ struct StepCountView: View {
                     .animation(.spring(response: 0.6), value: healthStore.steps)
                 
                 VStack {
-                    Text("\(healthStore.steps)")
+                    Text("\(number - 5)")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
                         .foregroundColor(.black)
                         .contentTransition(.numericText())
+                        .onAppear {
+                            startFakeAnimation()
+                        }
+                        .onDisappear {
+                            timer?.invalidate()
+                        }
                     
                     Text("steps")
                         .font(.subheadline)
@@ -182,6 +191,16 @@ struct StepCountView: View {
         )
     }
     
+    func startFakeAnimation() {
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { _ in
+            if number <= healthStore.steps  {
+                number += 5
+            } else {
+                timer?.invalidate()
+            }
+        }
+    }
     
     // This would normally come from the AppManager
     // Using mock data for demonstration
