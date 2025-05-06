@@ -193,10 +193,6 @@ struct StepCountView: View {
             AppStatus(appName: "Netflix", iconName: "tv.fill", goalSteps: 1000),
             AppStatus(appName: "Youtube", iconName: "play.rectangle.fill", goalSteps: 500),
             AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
-            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
-            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
-            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
-            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100)
         ]
     }
 }

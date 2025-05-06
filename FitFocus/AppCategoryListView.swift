@@ -161,7 +161,6 @@ struct AppDetailView: View {
     }
 }
 
-
 #Preview {
     AppCategoryListView()
         .environmentObject(AppManager())
