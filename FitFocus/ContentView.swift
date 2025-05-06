@@ -40,11 +40,11 @@ struct ContentView: View {
                         }
                         .tag(0)
 
-                AppCategoryListView()
-                    .tabItem {
-                        Label("Apps", systemImage: "app.fill")
-                    }
-                    .tag(1)
+//                AppCategoryListView()
+//                    .tabItem {
+//                        Label("Apps", systemImage: "app.fill")
+//                    }
+//                    .tag(1)
                 
                 RestrictedAppsView()
                     .tabItem {
