@@ -69,6 +69,12 @@ struct StepCountView: View {
                       .foregroundColor(.white)
                       .clipShape(Circle())
                       .frame(width: 60, height: 70)
+                      .scaleEffect(flicker ? 0.8 : 1.0)
+                      .opacity(flicker ? 0.8 : 1.0)
+//                      .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flicker)
+                         .onAppear {
+                             flicker = true
+                         }
                 }
                 }
             .navigationTitle("Hi \(userName)")
@@ -186,6 +192,10 @@ struct StepCountView: View {
             AppStatus(appName: "Twitter", iconName: "message.fill", goalSteps: 3000),
             AppStatus(appName: "Netflix", iconName: "tv.fill", goalSteps: 1000),
             AppStatus(appName: "Youtube", iconName: "play.rectangle.fill", goalSteps: 500),
+            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
+            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
+            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
+            AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100),
             AppStatus(appName: "Spotify", iconName: "music.note", goalSteps: 100)
         ]
     }
