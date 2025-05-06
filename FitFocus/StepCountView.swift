@@ -52,41 +52,24 @@ struct StepCountView: View {
                         }
                         Spacer()
                     }
-                    //                AddButtonWithBottomSheet()
                 }
-                Button(action: {
+                
+                Button{
                     // Haptic feedback
                     let impact = UIImpactFeedbackGenerator(style: .medium)
                     impact.impactOccurred()
 
                     showSheet.toggle()
-                }) {
-                    ZStack {
-                        // Outer glow (non-interactive)
-                        Circle()
-                            .fill(Color.mint)
-                            .frame(width: 60, height: 60)
-                            .scaleEffect(flicker ? 1.1 : 0.9)
-                            .opacity(flicker ? 0.2 : 0.1)
-                            .blur(radius: 10)
-                            .allowsHitTesting(false)
-
-                        // Inner glow
-                        Circle()
-                            .fill(Color.mint)
-                            .frame(width: 50, height: 50)
-                            .shadow(color: .mint.opacity(0.6), radius: flicker ? 20 : 8)
-                            .shadow(color: .mint.opacity(0.3), radius: flicker ? 30 : 10)
-
-                        // Plus icon
-                        Image(systemName: "plus")
-                            .font(.system(size: 20, weight: .bold))
-                            .foregroundColor(.white)
-                    }
-                    .frame(width: 90, height: 90) // Prevent layout shifts
-                    .blendMode(.screen)
-                    .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flicker)
-                    }
+                    print("Add new app")
+                } label: {
+                    Image(systemName: "plus")
+                      .font(.title.weight(.semibold))
+                      .padding(10)
+                      .background(.mint.opacity(0.6))
+                      .foregroundColor(.white)
+                      .clipShape(Circle())
+                      .frame(width: 60, height: 70)
+                }
                 }
             .navigationTitle("Hi \(userName)")
             .padding(.top, 30)
@@ -94,10 +77,8 @@ struct StepCountView: View {
                 if healthStore.isAuthorized {
                     healthStore.fetchTodaySteps()
                     showLoginAnimation = true
-                    flicker = true
                 } else {
                     healthStore.requestAuthorization()
-                    flicker = true
                 }
             }
             .sheet(isPresented: $showSheet) {
@@ -120,16 +101,14 @@ struct StepCountView: View {
         VStack {
             HStack {
                 Image(systemName: "figure.walk")
-                    .font(.title)
-                    .foregroundColor(.mint)
-                    .rotationEffect(.degrees(animate ? -10 : 10))
-                                .offset(y: animate ? -5 : 5)
-                            // bounce effect
-                                .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: animate)
-                                .onAppear {
-                                    animate = true
-                                }
-                
+                            .font(.title)
+                            .foregroundColor(.mint)
+                            .scaleEffect(flicker ? 0.8 : 0.9)
+                            .opacity(flicker ? 0.8 : 1.0)
+                            .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flicker)
+                            .onAppear {
+                                flicker = true
+                            }
                 
                 Text("Today's Steps")
                     .font(.headline)
@@ -195,7 +174,6 @@ struct StepCountView: View {
                 .fill(Color(white: 0.15))
                 .shadow(color: Color.white.opacity(0.1), radius: 10, x: 0, y: 5)
         )
-//        .matchedGeometryEffect(id: "stepCounter", in: animation)
     }
     
     
@@ -216,13 +194,7 @@ struct StepCountView: View {
 struct BottomSheetView: View {
     var body: some View {
         VStack(spacing: 20) {
-            Text("Bottom Sheet")
-                .font(.title2)
-                .padding()
-
-            Text("Drag up for full screen or down to dismiss.")
-                .multilineTextAlignment(.center)
-                .padding()
+            AppCategoryListView()
 
             Spacer()
         }
