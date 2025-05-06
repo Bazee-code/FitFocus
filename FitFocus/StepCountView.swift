@@ -14,93 +14,96 @@ struct StepCountView: View {
     @State private var animationAmount: CGFloat = 1.0
     @State private var showLoginAnimation = false
     @State private var animate = false
+    @State private var showSheet = false
+    @State private var flicker = false
     
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     var body: some View {
         NavigationStack{
-            VStack(spacing: 40) {
-                ScrollView(showsIndicators: false){
-                    
-                    VStack {
-            
-                        ZStack {
-                            stepCounterCard
-//                            Circle()
-//                                .stroke(Color.red.opacity(0.8), lineWidth: 20)
-//                                .frame(width: 200, height: 200)
-//                            
-//                            Circle()
-//                                .trim(from: 0, to: min(CGFloat(healthStore.steps) / 10000, 1.0))
-//                            
-//                                .stroke(
-//                                    Color.green.opacity(0.8),
-//                                    style: StrokeStyle(lineWidth: 20, lineCap: .round)
-//                                )
-//                                .frame(width: 200, height: 200)
-//                                .rotationEffect(.degrees(-90))
-//                                .animation(.easeInOut, value: healthStore.steps)
+            ZStack(alignment: .bottomTrailing) {
+                VStack(spacing : 40){
+                    ScrollView(showsIndicators: false){
+                        VStack {
                             
-//                            VStack {
-//                                Text("\(healthStore.steps)")
-//                                    .font(.system(size: 50, weight: .bold, design: .rounded))
-//                                    .foregroundColor(.primary)
-//                                    .scaleEffect(animationAmount)
-//                                    .animation(
-//                                        .spring(response: 0.4, dampingFraction: 0.6)
-//                                        .repeatCount(1),
-//                                        value: healthStore.steps
-//                                    )
-//                                    .onAppear {
-//                                        animationAmount = 1.1
-//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//                                            animationAmount = 1.0
-//                                        }
-//                                    }
-//                                    .onChange(of: healthStore.steps) { _ in
-//                                        animationAmount = 1.1
-//                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-//                                            animationAmount = 1.0
-//                                        }
-//                                    }
-//                                
-//                                Text("steps today")
-//                                    .font(.headline)
-//                                    .foregroundColor(.secondary)
-//                            }
-                        }
-                    }
-                        .padding(.top, 10)
-                        .padding(.horizontal, 10)
-                    
-                    // Goal progress section
-                    VStack(spacing: 20) {
-                        Text("Apps selected for tracking")
-                            .font(.title3)
-                            .fontWeight(.medium)
-                            .frame(maxWidth: .infinity, alignment: .leading)
-                            .padding()
-                        
-                        VStack(spacing: 15) {
-                            ForEach(appAccessStatus) { status in
-                                AppAccessStatusRow(status: status, currentSteps: healthStore.steps)
+                            ZStack {
+                                stepCounterCard
                             }
                         }
-                        .padding(.horizontal)
+                        .padding(.top, 10)
+                        .padding(.horizontal, 10)
+                        // Goal progress section
+                        VStack(spacing: 20) {
+                            HStack(){
+                                Text("Selected Apps")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .frame(maxWidth: .infinity, alignment: .leading)
+                                    .padding()
+                                
+                            }
+                            
+                            VStack(spacing: 15) {
+                                ForEach(appAccessStatus) { status in
+                                    AppAccessStatusRow(status: status, currentSteps: healthStore.steps)
+                                }
+                            }
+                            .padding(.horizontal)
+                        }
+                        Spacer()
                     }
-                    
-                    Spacer()
+                    //                AddButtonWithBottomSheet()
                 }
-            }
+                Button(action: {
+                    // Haptic feedback
+                    let impact = UIImpactFeedbackGenerator(style: .medium)
+                    impact.impactOccurred()
+
+                    showSheet.toggle()
+                }) {
+                    ZStack {
+                        // Outer glow (non-interactive)
+                        Circle()
+                            .fill(Color.mint)
+                            .frame(width: 60, height: 60)
+                            .scaleEffect(flicker ? 1.1 : 0.9)
+                            .opacity(flicker ? 0.2 : 0.1)
+                            .blur(radius: 10)
+                            .allowsHitTesting(false)
+
+                        // Inner glow
+                        Circle()
+                            .fill(Color.mint)
+                            .frame(width: 50, height: 50)
+                            .shadow(color: .mint.opacity(0.6), radius: flicker ? 20 : 8)
+                            .shadow(color: .mint.opacity(0.3), radius: flicker ? 30 : 10)
+
+                        // Plus icon
+                        Image(systemName: "plus")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                    }
+                    .frame(width: 90, height: 90) // Prevent layout shifts
+                    .blendMode(.screen)
+                    .animation(.easeInOut(duration: 0.8).repeatForever(autoreverses: true), value: flicker)
+                    }
+                }
             .navigationTitle("Hi \(userName)")
             .padding(.top, 30)
             .onAppear {
                 if healthStore.isAuthorized {
                     healthStore.fetchTodaySteps()
                     showLoginAnimation = true
+                    flicker = true
                 } else {
                     healthStore.requestAuthorization()
+                    flicker = true
                 }
+            }
+            .sheet(isPresented: $showSheet) {
+                BottomSheetView()
+                    .presentationDetents([.medium, .large])
+                    .presentationDragIndicator(.visible)
             }
         }
     }
@@ -116,21 +119,21 @@ struct StepCountView: View {
     private var stepCounterCard: some View {
         VStack {
             HStack {
-//                Image(systemName: "figure.walk")
-//                    .font(.title)
-//                    .foregroundColor(.mint)
-//                    .rotationEffect(.degrees(animate ? -10 : 10))
-//                                .offset(y: animate ? -5 : 5)
-//                            // bounce effect
-//                                .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: animate)
-//                                .onAppear {
-//                                    animate = true
-//                                }
+                Image(systemName: "figure.walk")
+                    .font(.title)
+                    .foregroundColor(.mint)
+                    .rotationEffect(.degrees(animate ? -10 : 10))
+                                .offset(y: animate ? -5 : 5)
+                            // bounce effect
+                                .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: animate)
+                                .onAppear {
+                                    animate = true
+                                }
                 
-                RealisticWalkingView()
                 
                 Text("Today's Steps")
                     .font(.headline)
+                    .padding(.horizontal, 2)
                 
                 Spacer()
                 
@@ -138,6 +141,7 @@ struct StepCountView: View {
                     withAnimation {
                         healthStore.fetchTodaySteps()
                     }
+                    print("fetched steps")
                 }) {
                     Image(systemName: "arrow.clockwise")
                         .font(.title3)
@@ -209,56 +213,21 @@ struct StepCountView: View {
     }
 }
 
-struct RealisticWalkingView: View {
-    @State private var isWalking = false
-
+struct BottomSheetView: View {
     var body: some View {
-        VStack {
-            ZStack {
-                // Torso
-                Rectangle()
-                    .frame(width: 8, height: 8)
-                    .foregroundColor(.mint)
+        VStack(spacing: 20) {
+            Text("Bottom Sheet")
+                .font(.title2)
+                .padding()
 
-                // Head
-                Circle()
-                    .frame(width: 7, height: 7)
-                    .foregroundColor(.mint)
-                    .offset(y: -8)
+            Text("Drag up for full screen or down to dismiss.")
+                .multilineTextAlignment(.center)
+                .padding()
 
-                // Left Arm
-                Rectangle()
-                    .frame(width: 4, height: 5)
-                    .foregroundColor(.mint)
-                    .rotationEffect(.degrees(isWalking ? 30 : -30), anchor: .top)
-                    .offset(x: -3, y: 5)
-
-                // Right Arm
-                Rectangle()
-                    .frame(width: 4, height: 5)
-                    .foregroundColor(.mint)
-                    .rotationEffect(.degrees(isWalking ? -30 : 30), anchor: .top)
-                    .offset(x: 3, y: 5)
-
-                // Left Leg
-                Rectangle()
-                    .frame(width: 4, height: 10)
-                    .foregroundColor(.mint)
-                    .rotationEffect(.degrees(isWalking ? -30 : 30), anchor: .top)
-                    .offset(x: -3, y: 13)
-
-                // Right Leg
-                Rectangle()
-                    .frame(width: 4, height: 10)
-                    .foregroundColor(.mint)
-                    .rotationEffect(.degrees(isWalking ? 30 : -30), anchor: .top)
-                    .offset(x: 3, y: 13)
-            }
-            .animation(Animation.easeInOut(duration: 0.4).repeatForever(autoreverses: true), value: isWalking)
+            Spacer()
         }
-        .onAppear {
-            isWalking.toggle()
-        }
+        .frame(maxWidth: .infinity)
+        .background(Color(UIColor.systemBackground))
     }
 }
 
@@ -320,7 +289,6 @@ struct AppAccessStatusRow: View {
         )
     }
 }
-
 
 #Preview {
     StepCountView()
