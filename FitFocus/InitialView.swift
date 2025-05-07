@@ -31,9 +31,11 @@ struct InitialView: View {
     var body: some View {
 //        NavigationStack {
             // Show the appropriate view based on authentication state
+//        Add check for email verification, if verified go to home, else error msg for verify
             Group {
-                if authViewModel.state == .signedIn ||
-                    (isPersistedLogin && authViewModel.currentUser != nil) {
+//                if authViewModel.state == .signedIn ||
+//                    (isPersistedLogin &&
+                     if(authViewModel.currentUser != nil && authViewModel.currentUser?.isEmailVerified == true){
                     // User is authenticated, show the Home view
                     ContentView()
                         .environmentObject(healthStore)
