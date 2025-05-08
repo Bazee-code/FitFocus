@@ -154,7 +154,8 @@ struct StepCountView: View {
                 VStack {
                     Text("\(number - 5)")
                         .font(.system(size: 40, weight: .bold, design: .rounded))
-                        .foregroundColor(.black)
+                        .foregroundColor(.gray)
+                        .fontWeight(.bold)
                         .contentTransition(.numericText())
                         .onAppear {
                             startFakeAnimation()
@@ -184,11 +185,9 @@ struct StepCountView: View {
             }
         }
         .padding()
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(white: 0.15))
-                .shadow(color: Color.white.opacity(0.1), radius: 10, x: 0, y: 5)
-        )
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
     
     func startFakeAnimation() {
@@ -276,14 +275,9 @@ struct AppAccessStatusRow: View {
             }
         }
         .padding()
-//        .background(Color.white)
-        .cornerRadius(12)
-//        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: 2)
-        .background(
-            RoundedRectangle(cornerRadius: 20)
-                .fill(Color(white: 0.15))
-                .shadow(color: Color.white.opacity(0.1), radius: 10, x: 0, y: 5)
-        )
+        .background(Color(.secondarySystemGroupedBackground))
+        .cornerRadius(15)
+        .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
 }
 

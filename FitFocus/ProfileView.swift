@@ -674,7 +674,7 @@ struct PrivacyPolicyView: View {
             }
             .padding()
         }
-        .navigationTitle("Privacy Policy")
+//        .navigationTitle("Privacy Policy")
         .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
     }
     
