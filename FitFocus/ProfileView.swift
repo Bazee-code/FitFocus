@@ -17,8 +17,8 @@ struct ProfileView: View {
     @EnvironmentObject var authViewModel: AuthenticationViewModel
     
     // App version info
-    private let appVersion = "1.0.3"
-    private let buildNumber = "42"
+    private let appVersion = "1.0.0"
+    private let buildNumber = "1"
     
     var body: some View {
         NavigationView {
@@ -107,26 +107,14 @@ struct ProfileView: View {
             
             // User Details
             VStack(alignment: .leading, spacing: 6) {
-                Text("John Appleseed")
+                Text("Hi \(userName)")
                     .font(.title3)
                     .fontWeight(.semibold)
                 
-                Text("john.appleseed@example.com")
+                Text(authViewModel.currentUser?.email ?? "Email Not Found" )
                     .font(.subheadline)
                     .foregroundColor(.secondary)
                 
-                Button(action: {
-                    // Edit profile action
-                }) {
-                    Text("Edit Profile")
-                        .font(.system(size: 14, weight: .medium))
-                        .foregroundColor(.white)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 6)
-                        .background(Color.blue)
-                        .cornerRadius(20)
-                }
-                .padding(.top, 5)
             }
             
             Spacer()
@@ -211,7 +199,7 @@ struct ProfileView: View {
             
             if showingQuickSetOptions {
                 HStack(spacing: 12) {
-                    ForEach([3000, 5000, 10000], id: \.self) { goal in
+                    ForEach([3000, 5000, 10000, 15000], id: \.self) { goal in
                         Button(action: {
                             withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
                                 stepGoal = goal
@@ -314,12 +302,12 @@ struct ProfileView: View {
             withAnimation {
                 showingLogoutAlert = true
             }
-            signOut()
         }) {
             HStack {
                 Text("Logout")
                     .fontWeight(.medium)
                 Image(systemName: "rectangle.portrait.and.arrow.right")
+                
             }
             .font(.headline)
             .foregroundColor(.white)
@@ -341,12 +329,22 @@ struct ProfileView: View {
                 message: Text("Are you sure you want to logout?"),
                 primaryButton: .destructive(Text("Logout")) {
                     // Perform logout action
+                    signOut()
                 },
                 secondaryButton: .cancel()
             )
         }
+        .padding(.bottom, 100)
     }
     
+     private var userName: String {
+         if let displayName = authViewModel.currentUser?.displayName, !displayName.isEmpty {
+             return displayName
+         } else {
+             return "User"
+         }
+     }
+                     
     private func signOut() {
         Task {
             await authViewModel.signOut()
@@ -698,8 +696,7 @@ struct PrivacyPolicyView: View {
 }
 
 // Preview provider
-struct ProfileView_Previews: PreviewProvider {
-    static var previews: some View {
-        ProfileView()
-    }
+#Preview {
+    ProfileView()
+        .environmentObject(AuthenticationViewModel())
 }
