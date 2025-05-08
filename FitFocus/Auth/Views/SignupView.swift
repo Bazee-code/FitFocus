@@ -177,11 +177,11 @@ struct SignupView: View {
                 .opacity(0.9)
                 .shadow(color: Color(hex: "4CC2FF").opacity(0.5), radius: 10, x: 0, y: 0)
             
-            Text("Your account has been created successfully")
+            Text("Check your email")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundColor(.white)
             
-            Text("We've sent an email verification link to \(email).\nPlease check your inbox and follow the instructions to activate your account.")
+            Text("We've sent an email verification link to \(email).\nFollow the instructions to activate your account.")
                 .font(.system(size: 16))
                 .foregroundColor(.white.opacity(0.8))
                 .multilineTextAlignment(.center)
