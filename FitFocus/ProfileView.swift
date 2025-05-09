@@ -362,9 +362,9 @@ struct HelpSupportView: View {
     ]
     
     // Contact info
-    private let emailAddress = "support@steptracker.com"
-    private let twitterHandle = "@StepTrackerApp"
-    private let twitterURL = "https://twitter.com/StepTrackerApp"
+    private let emailAddress = "support@stepfocus.com"
+    private let twitterHandle = "@StepFocusApp"
+    private let twitterURL = "https://twitter.com/StepFocusApp"
     
     var body: some View {
         ScrollView {
