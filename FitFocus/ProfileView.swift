@@ -375,11 +375,15 @@ struct HelpSupportView: View {
                         .font(.title2)
                         .fontWeight(.bold)
                     
-                    ForEach(gettingStartedTopics, id: \.id) { topic in
+                    ForEach(Array(gettingStartedTopics.enumerated()), id: \.1.id) { index, topic in
                         NavigationLink(destination: TopicDetailView(topicId: topic.id)) {
                             guideItem(icon: topic.icon, title: topic.title)
                         }
                         .buttonStyle(PlainButtonStyle())
+                        
+                        if index < gettingStartedTopics.count - 1 {
+                            Divider()
+                        }
                     }
                 }
                 .padding()
@@ -388,7 +392,7 @@ struct HelpSupportView: View {
                 .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 
                 // Contact Section
-                VStack(alignment: .leading, spacing: 16) {
+                VStack(alignment: .leading, spacing: 10) {
                     Text("Contact Us")
                         .font(.title2)
                         .fontWeight(.bold)
@@ -403,6 +407,8 @@ struct HelpSupportView: View {
                     }
                     .buttonStyle(PlainButtonStyle())
                     
+                    Divider()
+                    
                     // Twitter link
                     Button(action: {
                         if let url = URL(string: twitterURL) {
@@ -412,6 +418,8 @@ struct HelpSupportView: View {
                         contactItem(icon: "bubble.left.fill", title: "Twitter", detail: twitterHandle)
                     }
                     .buttonStyle(PlainButtonStyle())
+                    
+                    Divider()
                     
                     // FAQ (navigates to new view)
                     NavigationLink(destination: FAQView()) {
@@ -446,8 +454,10 @@ struct HelpSupportView: View {
             Image(systemName: "chevron.right")
                 .foregroundColor(.secondary)
                 .font(.caption)
+            
         }
-        .padding(.vertical, 8)
+        .padding(.vertical, 3)
+        .padding(.bottom, 5)
     }
     
     private func contactItem(icon: String, title: String, detail: String) -> some View {
@@ -472,6 +482,7 @@ struct HelpSupportView: View {
                 .foregroundColor(.secondary)
         }
         .padding(.vertical, 4)
+        .padding(.bottom, 5)
     }
 }
 
