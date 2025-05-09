@@ -33,7 +33,7 @@ struct ProfileView: View {
                             }
                         }
                     
-                    Divider()
+//                    Divider()
                     
                     // Notifications Section
                     notificationsSection
@@ -44,7 +44,7 @@ struct ProfileView: View {
                             }
                         }
                     
-                    Divider()
+//                    Divider()
                     
                     // Steps Goal Section
                     stepsGoalSection
@@ -55,7 +55,7 @@ struct ProfileView: View {
                             }
                         }
                     
-                    Divider()
+//                    Divider()
                     
                     // About Section
                     aboutSection
@@ -120,7 +120,7 @@ struct ProfileView: View {
             Spacer()
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
@@ -147,7 +147,7 @@ struct ProfileView: View {
                 .foregroundColor(.secondary)
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
@@ -221,7 +221,7 @@ struct ProfileView: View {
             }
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
@@ -291,7 +291,7 @@ struct ProfileView: View {
             .padding(.vertical, 8)
         }
         .padding()
-        .background(Color(.systemBackground))
+        .background(Color(.secondarySystemGroupedBackground))
         .cornerRadius(15)
         .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
     }
@@ -383,9 +383,9 @@ struct HelpSupportView: View {
                     }
                 }
                 .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.1), radius: 5)
+                .background(Color(.secondarySystemGroupedBackground))
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
                 
                 // Contact Section
                 VStack(alignment: .leading, spacing: 16) {
@@ -420,9 +420,9 @@ struct HelpSupportView: View {
                     .buttonStyle(PlainButtonStyle())
                 }
                 .padding()
-                .background(Color(.systemBackground))
-                .cornerRadius(12)
-                .shadow(color: Color.black.opacity(0.1), radius: 5)
+                .background(Color(.secondarySystemGroupedBackground))
+                .cornerRadius(15)
+                .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
             .padding()
         }
@@ -485,9 +485,10 @@ struct TopicDetailView: View {
                 // Topic content
                 topicContent
                     .padding()
-                    .background(Color(.systemBackground))
-                    .cornerRadius(12)
-                    .shadow(color: Color.black.opacity(0.1), radius: 5)
+                    .padding(.bottom, 10)
+                    .background(Color(.secondarySystemGroupedBackground))
+                    .cornerRadius(15)
+                    .shadow(color: Color.black.opacity(0.1), radius: 5, x: 0, y: 2)
             }
             .padding()
         }
@@ -623,8 +624,8 @@ struct FAQView: View {
             }
             .padding()
         }
+        .padding()
         .navigationTitle("FAQ")
-        .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
     }
 }
 
@@ -634,10 +635,6 @@ struct PrivacyPolicyView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
                 Group {
-                    Text("Privacy Policy")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.bottom, 5)
                     
                     Text("Last updated: May 1, 2025")
                         .font(.subheadline)
@@ -674,8 +671,7 @@ struct PrivacyPolicyView: View {
             }
             .padding()
         }
-//        .navigationTitle("Privacy Policy")
-        .background(Color(.systemGroupedBackground).edgesIgnoringSafeArea(.all))
+        .navigationTitle("Privacy Policy")
     }
     
     private func policySection(title: String, content: String) -> some View {
